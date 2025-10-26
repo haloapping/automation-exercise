@@ -1,0 +1,8 @@
+.env
+.ruff_cache
+.pytest_cache
+__pycache__
+.vscode
+logs/
+screen-record/
+screenshot/
