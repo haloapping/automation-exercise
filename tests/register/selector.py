@@ -39,6 +39,12 @@ CREATE_ACCOUNT_BTN = "#form > div > div > div > div > form > button"
 ACCOUNT_CREATED_TXT = "#form > div > div > div > h2 > b"
 CONTINUE_BTN = "#form > div > div > div > div > a"
 
-LOGIN_AS_TXT = "#header > div > div > div > div.col-sm-8 > div > ul > li:nth-child(10) > a"
-DELETE_ACCOUNT_MENU = "#header > div > div > div > div.col-sm-8 > div > ul > li:nth-child(5) > a"
-ACCOUNT_DELETED_TXT= "#form > div > div > div > h2 > b"
+LOGIN_AS_TXT = (
+    "#header > div > div > div > div.col-sm-8 > div > ul > li:nth-child(10) > a"
+)
+DELETE_ACCOUNT_MENU = (
+    "#header > div > div > div > div.col-sm-8 > div > ul > li:nth-child(5) > a"
+)
+ACCOUNT_DELETED_TXT = "#form > div > div > div > h2 > b"
+
+EMAIL_EXIST_TXT = "#form > div > div > div:nth-child(3) > div > form > p"

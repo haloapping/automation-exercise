@@ -132,3 +132,44 @@ def test_register():
         page.close()
         context.close()
         browser.close()
+
+
+@snoop
+def test_register_existing_email():
+    with sync_playwright() as p:
+        # Config browser and context page
+        browser = p.chromium.launch(headless=config.HEADLESS, slow_mo=config.SLOW_MO)
+        context = browser.new_context(
+            record_video_dir=f"screen-record/{format_name}",
+            record_video_size={
+                "width": config.VIDEO_WIDTH_SIZE,
+                "height": config.VIDEO_HEIGHT_SIZE,
+            },
+        )
+
+        # Trace activity
+        context.tracing.start(screenshots=True, snapshots=True, sources=True)
+
+        page = context.new_page()
+        page.set_viewport_size(
+            {
+                "width": config.VIEW_PORT_WIDTH_SIZE,
+                "height": config.VIEW_PORT_HEIGHT_SIZE,
+            }
+        )
+        page.goto(config.URL)
+
+        expect(page).to_have_title("Automation Exercise")
+
+        # Sign Up Form
+        page.click(selector.SIGNUP_LOGIN_MENU)
+        expect(page.locator(selector.NEWUSER_SIGNUP_TXT)).to_be_visible()
+        page.fill(selector.NAME_INPUT_TXT, "ping")
+        page.fill(selector.EMAIL_INPUT_TXT, "ping@jamil.com")
+        page.click(selector.SIGNUP_BTN)
+
+        expect(page.locator(selector.EMAIL_EXIST_TXT)).to_be_visible()
+
+        page.close()
+        context.close()
+        browser.close()
