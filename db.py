@@ -1,9 +1,9 @@
 from psycopg.rows import dict_row
 from psycopg_pool import ConnectionPool
-import config
+import configvar
 
 
-DB_DSN = f"host={config.HOST} dbname={config.DBNAME} user={config.USER} password={config.PASSWORD}"
+DB_DSN = f"host={configvar.HOST} dbname={configvar.DBNAME} user={configvar.USER} password={configvar.PASSWORD}"
 
 pool = ConnectionPool(
     open=True,

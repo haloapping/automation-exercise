@@ -1,28 +1,21 @@
 import snoop
-import pendulum
-import os
-import config
+import configvar
 import random
 from faker import Faker
 from playwright.sync_api import sync_playwright, expect
 from tests.register import selector
-
-os.makedirs("logs", exist_ok=True)
-now = pendulum.now()
-format_name = now.format("YYYY-MM-DD_HH-mm-ss")
-snoop.install(out=f"logs/{format_name}.log")
-
+from config import timestamp
 
 @snoop
-def test_register():
+def test_register(timestamp):
     with sync_playwright() as p:
         # Config browser and context page
-        browser = p.chromium.launch(headless=config.HEADLESS, slow_mo=config.SLOW_MO)
+        browser = p.chromium.launch(headless=configvar.HEADLESS, slow_mo=configvar.SLOW_MO)
         context = browser.new_context(
-            record_video_dir=f"screen-record/{format_name}",
+            record_video_dir=f"screen-record/{timestamp}",
             record_video_size={
-                "width": config.VIDEO_WIDTH_SIZE,
-                "height": config.VIDEO_HEIGHT_SIZE,
+                "width": configvar.VIDEO_WIDTH_SIZE,
+                "height": configvar.VIDEO_HEIGHT_SIZE,
             },
         )
 
@@ -32,11 +25,11 @@ def test_register():
         page = context.new_page()
         page.set_viewport_size(
             {
-                "width": config.VIEW_PORT_WIDTH_SIZE,
-                "height": config.VIEW_PORT_HEIGHT_SIZE,
+                "width": configvar.VIEW_PORT_WIDTH_SIZE,
+                "height": configvar.VIEW_PORT_HEIGHT_SIZE,
             }
         )
-        page.goto(config.URL)
+        page.goto(configvar.URL)
 
         expect(page).to_have_title("Automation Exercise")
 
@@ -135,15 +128,15 @@ def test_register():
 
 
 @snoop
-def test_register_existing_email():
+def test_register_existing_email(timestamp):
     with sync_playwright() as p:
         # Config browser and context page
-        browser = p.chromium.launch(headless=config.HEADLESS, slow_mo=config.SLOW_MO)
+        browser = p.chromium.launch(headless=configvar.HEADLESS, slow_mo=configvar.SLOW_MO)
         context = browser.new_context(
-            record_video_dir=f"screen-record/{format_name}",
+            record_video_dir=f"screen-record/{timestamp}",
             record_video_size={
-                "width": config.VIDEO_WIDTH_SIZE,
-                "height": config.VIDEO_HEIGHT_SIZE,
+                "width": configvar.VIDEO_WIDTH_SIZE,
+                "height": configvar.VIDEO_HEIGHT_SIZE,
             },
         )
 
@@ -153,11 +146,11 @@ def test_register_existing_email():
         page = context.new_page()
         page.set_viewport_size(
             {
-                "width": config.VIEW_PORT_WIDTH_SIZE,
-                "height": config.VIEW_PORT_HEIGHT_SIZE,
+                "width": configvar.VIEW_PORT_WIDTH_SIZE,
+                "height": configvar.VIEW_PORT_HEIGHT_SIZE,
             }
         )
-        page.goto(config.URL)
+        page.goto(configvar.URL)
 
         expect(page).to_have_title("Automation Exercise")
 
