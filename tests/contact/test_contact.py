@@ -1,17 +1,24 @@
 import snoop
 import configvar
+import os
 from faker import Faker
 from playwright.sync_api import sync_playwright, expect
 from tests.contact import selector
-from config import timestamp
+from conftest import TIMESTAMP
+
+os.makedirs("logs", exist_ok=True)
+snoop.install(out=f"logs/{TIMESTAMP}.log")
+
 
 @snoop
-def test_contact_form(timestamp):
+def test_contact_form():
     with sync_playwright() as p:
         # Config browser and context page
-        browser = p.chromium.launch(headless=configvar.HEADLESS, slow_mo=configvar.SLOW_MO)
+        browser = p.chromium.launch(
+            headless=configvar.HEADLESS, slow_mo=configvar.SLOW_MO
+        )
         context = browser.new_context(
-            record_video_dir=f"screen-record/{timestamp}",
+            record_video_dir=f"screen-record/{TIMESTAMP}",
             record_video_size={
                 "width": configvar.VIDEO_WIDTH_SIZE,
                 "height": configvar.VIDEO_HEIGHT_SIZE,

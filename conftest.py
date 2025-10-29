@@ -1,14 +1,16 @@
 import snoop
 import pendulum
 import os
-import pytest
 
+TIMESTAMP = None
 
-@pytest.fixture(scope="session", autouse=True)
-def timestamp():
+def pytest_sessionstart(session):
+    global TIMESTAMP
+
     os.makedirs("logs", exist_ok=True)
+
     now = pendulum.now()
     timestamp_str = now.format("YYYY-MM-DD_HH-mm-ss")
-    snoop.install(out=f"logs/{timestamp_str}.log")
+    TIMESTAMP = timestamp_str
 
-    return timestamp_str
+    snoop.install(out=f"logs/{timestamp_str}.log")

@@ -1,20 +1,24 @@
 import snoop
 import configvar
+import os
 from faker import Faker
 from playwright.sync_api import sync_playwright, expect
 from tests.login import selector
-from config import timestamp
+from conftest import TIMESTAMP
+
+os.makedirs("logs", exist_ok=True)
+snoop.install(out=f"logs/{TIMESTAMP}.log")
 
 
 @snoop
-def test_login_correct(timestamp):
+def test_login_correct():
     with sync_playwright() as p:
         # Config browser and context page
         browser = p.chromium.launch(
             headless=configvar.HEADLESS, slow_mo=configvar.SLOW_MO
         )
         context = browser.new_context(
-            record_video_dir=f"screen-record/{timestamp}",
+            record_video_dir=f"screen-record/{TIMESTAMP}",
             record_video_size={
                 "width": configvar.VIDEO_WIDTH_SIZE,
                 "height": configvar.VIDEO_HEIGHT_SIZE,
@@ -40,7 +44,7 @@ def test_login_correct(timestamp):
         expect(page.locator(selector.LOGIN_ACCOUNT_TXT)).to_be_visible()
         page.fill(selector.EMAIL_INPUT_TXT, "rahel@jamil.com")
         page.fill(selector.PASSWORD_INPUT_TXT, "4HptpQ@XsLcKuZX")
-        page.screenshot(path=f"screenshot/{timestamp}/login_correct_page.png")
+        page.screenshot(path=f"screenshot/{TIMESTAMP}/login_correct_page.png")
         page.click(selector.LOGIN_BTN)
 
         expect(page.locator(selector.LOGIN_AS_TXT)).to_be_visible()
@@ -51,14 +55,14 @@ def test_login_correct(timestamp):
 
 
 @snoop
-def test_login_incorrect(timestamp):
+def test_login_incorrect():
     with sync_playwright() as p:
         # Config browser and context page
         browser = p.chromium.launch(
             headless=configvar.HEADLESS, slow_mo=configvar.SLOW_MO
         )
         context = browser.new_context(
-            record_video_dir=f"screen-record/{timestamp}",
+            record_video_dir=f"screen-record/{TIMESTAMP}",
             record_video_size={
                 "width": configvar.VIDEO_WIDTH_SIZE,
                 "height": configvar.VIDEO_HEIGHT_SIZE,
@@ -96,7 +100,7 @@ def test_login_incorrect(timestamp):
             ),
         )
         page.click(selector.LOGIN_BTN)
-        page.screenshot(path=f"screenshot/{timestamp}/login_incorrect_page.png")
+        page.screenshot(path=f"screenshot/{TIMESTAMP}/login_incorrect_page.png")
 
         expect(page.locator(selector.EMAIL_OR_PASSWORD_INCORRECT_TXT)).to_be_visible()
 
